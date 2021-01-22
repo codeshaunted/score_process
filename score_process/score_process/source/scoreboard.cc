@@ -21,13 +21,13 @@
 #include <iostream>
 #include <fstream>
 
-#include "json.hpp"
+#include "single_include/nlohmann/json.hpp"
 
 namespace score_process {
 
 Scoreboard::Scoreboard() {
-  kill_log_ui_regex_ = std::regex(kill_log_ui_string_);
   update_score_message_regex_ = std::regex(update_score_message_string_);
+  kill_log_ui_regex_ = std::regex(kill_log_ui_string_);
   bomb_defuse_regex_ = std::regex(bomb_defuse_string_);
 
   std::string roaming_path = getenv("APPDATA"); // gets path to AppData\\Roaming

@@ -394,3 +394,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
+# Steamworks SDK
+score_process/score_process/third_party/steamworks/*
+
