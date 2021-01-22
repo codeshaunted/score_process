@@ -21,7 +21,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "json.h"
+#include "json.hpp"
 
 namespace score_process {
 

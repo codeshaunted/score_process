@@ -1,3 +1,3 @@
 [submodule "score_process/score_process/third_party/json"]
-    path = score_process/score_process/third_party/json
-    url = https://github.com/nlohmann/json
+	path = score_process/score_process/third_party/json
+	url = https://github.com/nlohmann/json

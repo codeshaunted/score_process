@@ -18,7 +18,7 @@
 #ifndef EVENT_H_
 #define EVENT_H_
 
-#include "json.h"
+#include "json.hpp"
 
 namespace score_process {
 
