@@ -21,10 +21,14 @@
 #include <iostream>
 #include <fstream>
 
+#include "json.h"
+
 namespace score_process {
 
 Scoreboard::Scoreboard() {
-  kill_log_ui_regex = std::regex(kill_log_ui_string);
+  kill_log_ui_regex_ = std::regex(kill_log_ui_string_);
+  update_score_message_regex_ = std::regex(update_score_message_string_);
+  bomb_defuse_regex_ = std::regex(bomb_defuse_string_);
 
   std::string roaming_path = getenv("APPDATA"); // gets path to AppData\\Roaming
 
@@ -45,29 +49,38 @@ Scoreboard::Scoreboard() {
 }
 
 void Scoreboard::ProcessLine(std::string line) {
+  BaseEvent* event = nullptr;
   std::smatch match;
 
-  if (std::regex_search(line, match, kill_log_ui_regex)) {
-    KillLogUIEvent* event = new KillLogUIEvent(match.str(2), match.str(5));
-    //event->killer = match.str(2);
-    //event->victim = match.str(5);
-
-    HandleEvent(event);
+  if (std::regex_search(line, match, kill_log_ui_regex_)) {
+    event = new KillLogUIEvent(match.str(2), match.str(5));
   }
+  else if (std::regex_search(line, match, update_score_message_regex_)) {
+    event = new UpdateScoreMessageEvent(nlohmann::json::parse(match.str(1)));
+  }
+  else if (std::regex_search(line, match, bomb_defuse_regex_)) {
+    event = new BombDefusedEvent();
+  }
+
+  if (event) HandleEvent(event);
 }
 
 void Scoreboard::HandleEvent(BaseEvent* event) {
   switch (event->event_type_) {
     case EventType::kNone: // this should never happen
       break;
-    case EventType::kUpdateScoreMessage:
+    case EventType::kUpdateScoreMessage: {
+      UpdateScoreMessageEvent* cast_event = static_cast<UpdateScoreMessageEvent*>(event);
+      //std::cout << cast_event->json_data_["AttackerScore"] << "-" << cast_event->json_data_["DefenderScore"] << std::endl;
       break;
+    }
     case EventType::kKillLogUI: {
-      KillLogUIEvent* custom_event = static_cast<KillLogUIEvent*>(event);
-      std::cout << custom_event->killer_ << " killed " << custom_event->victim_ << std::endl;
+      KillLogUIEvent* cast_event = static_cast<KillLogUIEvent*>(event);
+      //std::cout << cast_event->killer_ << " killed " << cast_event->victim_ << std::endl;
       break;
     }
     case EventType::kBombDefused:
+      std::cout << "BOMB DEFUSED!!!" << std::endl;
       break;
   }
 

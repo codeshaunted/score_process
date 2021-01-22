@@ -32,8 +32,12 @@ class Scoreboard {
   void HandleEvent(BaseEvent* event);
  private:
   std::string log_sub_path_ = "\\..\\LocalLow\\Giant Enemy Crab\\Due Process\\Player.log"; // TODO: don't use a relative path here
-  std::string kill_log_ui_string = "KillLogUI :: Entry :: <color=#(27DBFFFF|FF083AEB)><noparse>(.{0,32})<\\/noparse><\\/color> (WASTED|NEUTRALIZED|DISHONORABLY DISCHARGED|DOUBLE-CROSSED) <color=#(27DBFFFF|FF083AEB)><noparse>(.{0,32})<\\/noparse><\\/color>";
-  std::regex kill_log_ui_regex;
+  std::string kill_log_ui_string_ = "KillLogUI :: Entry :: <color=#(27DBFFFF|FF083AEB)><noparse>(.{0,32})<\\/noparse><\\/color> (WASTED|NEUTRALIZED|DISHONORABLY DISCHARGED|DOUBLE-CROSSED) <color=#(27DBFFFF|FF083AEB)><noparse>(.{0,32})<\\/noparse><\\/color>";
+  std::regex kill_log_ui_regex_;
+  std::string update_score_message_string_ = "NewMatchmakingManager::HandleUpdateMatchScoreMessage\\((.*) \\)";
+  std::regex update_score_message_regex_;
+  std::string bomb_defuse_string_ = "GameStatusSimulator :: Bomb \\[[0-9]*\\] DEFUSED";
+  std::regex bomb_defuse_regex_;
 };
 
 } // namespace score_process

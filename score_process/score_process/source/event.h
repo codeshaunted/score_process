@@ -18,6 +18,8 @@
 #ifndef EVENT_H_
 #define EVENT_H_
 
+#include "json.h"
+
 namespace score_process {
 
 enum class EventType {
@@ -34,11 +36,22 @@ class BaseEvent {
   EventType event_type_;
 };
 
+class UpdateScoreMessageEvent : public BaseEvent {
+public:
+  UpdateScoreMessageEvent(nlohmann::json json_data) : BaseEvent(EventType::kUpdateScoreMessage), json_data_(json_data) {};
+  nlohmann::json json_data_;
+};
+
 class KillLogUIEvent : public BaseEvent {
  public:
   KillLogUIEvent(std::string killer, std::string victim) : BaseEvent(EventType::kKillLogUI), killer_(killer), victim_(victim) {};
   std::string killer_;
   std::string victim_;
+};
+
+class BombDefusedEvent : public BaseEvent {
+public:
+  BombDefusedEvent() : BaseEvent(EventType::kBombDefused) {};
 };
 
 /*
