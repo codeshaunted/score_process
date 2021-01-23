@@ -1,3 +1,6 @@
 [submodule "score_process/score_process/third_party/json"]
 	path = score_process/score_process/third_party/json
 	url = https://github.com/nlohmann/json
+[submodule "score_process/score_process/third_party/cpp-httplib"]
+	path = score_process/score_process/third_party/cpp-httplib
+	url = https://github.com/yhirose/cpp-httplib
