@@ -18,7 +18,7 @@
 #ifndef EVENT_H_
 #define EVENT_H_
 
-#include "single_include/nlohmann/json.hpp"
+#include "json/single_include/nlohmann/json.hpp"
 
 namespace score_process {
 
