@@ -1,4 +1,3 @@
-#include "scoreboard.h"
 // scoreboard.cc
 // Copyright (C) 2020 averysumner
 //
@@ -21,7 +20,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "single_include/nlohmann/json.hpp"
+#include "json/single_include/nlohmann/json.hpp"
 
 namespace score_process {
 

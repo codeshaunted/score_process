@@ -37,7 +37,7 @@ class BaseEvent {
 };
 
 class UpdateScoreMessageEvent : public BaseEvent {
-public:
+ public:
   UpdateScoreMessageEvent(nlohmann::json json_data) : BaseEvent(EventType::kUpdateScoreMessage), json_data_(json_data) {};
   nlohmann::json json_data_;
 };
@@ -50,7 +50,7 @@ class KillLogUIEvent : public BaseEvent {
 };
 
 class BombDefusedEvent : public BaseEvent {
-public:
+ public:
   BombDefusedEvent() : BaseEvent(EventType::kBombDefused) {};
 };
 

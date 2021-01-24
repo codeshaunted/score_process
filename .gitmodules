@@ -1,6 +1,9 @@
-[submodule "score_process/score_process/third_party/json"]
-	path = score_process/score_process/third_party/json
+[submodule "third_party/json"]
+	path = third_party/json
 	url = https://github.com/nlohmann/json
-[submodule "score_process/score_process/third_party/cpp-httplib"]
-	path = score_process/score_process/third_party/cpp-httplib
+[submodule "third_party/cpp-httplib"]
+	path = third_party/cpp-httplib
 	url = https://github.com/yhirose/cpp-httplib
+[submodule "third_party/imgui"]
+	path = third_party/imgui
+	url = https://github.com/ocornut/imgui
