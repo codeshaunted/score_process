@@ -1,5 +1,5 @@
-// scoreboard.cc
-// Copyright (C) 2020 averysumner
+// event_scanner.cc
+// Copyright (C) averysumner
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -15,7 +15,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#include "scoreboard.h"
+#include "event_scanner.h"
 
 #include <iostream>
 #include <fstream>
@@ -24,12 +24,17 @@
 
 namespace score_process {
 
-Scoreboard::Scoreboard() {
+EventScanner::EventScanner() {
+  // somehow make this regex initialization more dynamic? maybe an std::map?
   update_score_message_regex_ = std::regex(update_score_message_string_);
   kill_log_ui_regex_ = std::regex(kill_log_ui_string_);
   bomb_defuse_regex_ = std::regex(bomb_defuse_string_);
+  current_round_regex_ = std::regex(current_round_string_);
+  in_game_regex_ = std::regex(in_game_string_);
+  join_match_in_progress_message_regex_ = std::regex(join_match_in_progress_message_string_);
+  json_dump_regex_ = std::regex(json_dump_string_);
 
-  std::string roaming_path = getenv("APPDATA"); // gets path to AppData\\Roaming
+  std::string roaming_path = getenv("APPDATA"); // gets path to AppData\\Roaming, TODO: maybe use the "safe" version?
 
   std::ifstream log_file(roaming_path + log_sub_path_);
 
@@ -45,9 +50,11 @@ Scoreboard::Scoreboard() {
       log_file.clear();
     }
   }
+
+  match_ = new Match();
 }
 
-void Scoreboard::ProcessLine(std::string line) {
+void EventScanner::ProcessLine(std::string line) {
   BaseEvent* event = nullptr;
   std::smatch match;
 
@@ -60,17 +67,26 @@ void Scoreboard::ProcessLine(std::string line) {
   else if (std::regex_search(line, match, bomb_defuse_regex_)) {
     event = new BombDefusedEvent();
   }
+  else if (std::regex_search(line, match, current_round_regex_)) {
+    event = new CurrentRoundEvent(std::stoi(match.str(1)));
+  }
+  else if (std::regex_search(line, match, join_match_in_progress_message_regex_)) {
+    event = new JoinMatchInProgressMessageEvent(nlohmann::json::parse(match.str(1)));
+  }
+  else if (std::regex_search(line, match, json_dump_regex_)) {
+    event = new JSONDumpEvent(nlohmann::json::parse(match.str(1)));
+  }
 
   if (event) HandleEvent(event);
 }
 
-void Scoreboard::HandleEvent(BaseEvent* event) {
+void EventScanner::HandleEvent(BaseEvent* event) {
   switch (event->event_type_) {
     case EventType::kNone: // this should never happen
       break;
     case EventType::kUpdateScoreMessage: {
       UpdateScoreMessageEvent* cast_event = static_cast<UpdateScoreMessageEvent*>(event);
-      //std::cout << cast_event->json_data_["AttackerScore"] << "-" << cast_event->json_data_["DefenderScore"] << std::endl;
+      std::cout << "ROUND ENDED, SCORE IS: " << cast_event->json_data_["AttackerScore"] << "-" << cast_event->json_data_["DefenderScore"] << std::endl;
       break;
     }
     case EventType::kKillLogUI: {
@@ -79,11 +95,29 @@ void Scoreboard::HandleEvent(BaseEvent* event) {
       break;
     }
     case EventType::kBombDefused:
-      std::cout << "BOMB DEFUSED!!!" << std::endl;
+      std::cout << "BOMB DEFUSED" << std::endl;
       break;
+    case EventType::kCurrentRound: {
+      CurrentRoundEvent* cast_event = static_cast<CurrentRoundEvent*>(event);
+      break;
+    }
+    case EventType::kJoinMatchInProgressMessage: {
+      JoinMatchInProgressMessageEvent* cast_event = static_cast<JoinMatchInProgressMessageEvent*>(event);
+      std::cout << cast_event->json_data_ << std::endl;
+      break;
+    }
+    case EventType::kJSONDump: {
+      JSONDumpEvent* cast_event = static_cast<JSONDumpEvent*>(event);
+      HandleJSONDump(cast_event->json_data_);
+      break;
+    }
   }
 
   delete event;
+}
+
+void EventScanner::HandleJSONDump(nlohmann::json json_data) {
+
 }
 
 } // namespace score_process

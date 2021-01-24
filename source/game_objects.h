@@ -1,4 +1,4 @@
-// main.cc
+// game_objects.h
 // Copyright (C) averysumner
 //
 // This program is free software; you can redistribute it and/or
@@ -15,12 +15,43 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#include <iostream>
+#ifndef GAME_OBJECTS_H_
+#define GAME_OBJECTS_H_
 
-#include "event_scanner.h"
-#include "steam_api.h"
-#include "json/single_include/nlohmann/json.hpp"
+#include <vector>
+#include <string>
 
-int main() {
-  score_process::EventScanner();
+namespace score_process {
+
+struct Player {
+  std::string name;
+  int kills;
+  int deaths;
+};
+
+struct Team {
+  std::vector<Player> players;
+  int score;
+};
+
+enum class GameMode {
+  kCasual = 1,
+  kRanked = 2
+};
+
+enum class WinCondition {
+  kBombDefused,
+  kBombExploded,
+  kAttackersEliminated
+};
+
+struct Match {
+  GameMode game_mode;
+  Team attacker_team;
+  Team defender_team;
+  std::vector<WinCondition> rounds;
+};
+
 }
+
+#endif // GAME_OBJECTS_H_

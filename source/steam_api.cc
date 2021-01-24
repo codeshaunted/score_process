@@ -1,5 +1,5 @@
 // steam_api.cc
-// Copyright (C) 2020 averysumner
+// Copyright (C) averysumner
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

@@ -1,5 +1,5 @@
 // event.h
-// Copyright (C) 2020 averysumner
+// Copyright (C) averysumner
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -26,7 +26,10 @@ enum class EventType {
   kNone,
   kUpdateScoreMessage,
   kKillLogUI,
-  kBombDefused
+  kBombDefused,
+  kCurrentRound,
+  kJoinMatchInProgressMessage,
+  kJSONDump
 };
 
 class BaseEvent {
@@ -54,47 +57,23 @@ class BombDefusedEvent : public BaseEvent {
   BombDefusedEvent() : BaseEvent(EventType::kBombDefused) {};
 };
 
-/*
-class BaseRotationCommand : public BaseCommand {
-protected:
-  BaseRotationCommand(ObjectID target_id, CommandID command_id, float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f) : BaseCommand(target_id, command_id), x_(x), y_(y), z_(z), w_(w) {};
-public:
-  float x_;
-  float y_;
-  float z_;
-  float w_;
-};
-
-class BasePhysicsUpdate : public BaseCommand {
-protected:
-  BasePhysicsUpdate(ObjectID target_id, CommandID command_id, Vector3 vector, Quaternion quaternion) : BaseCommand(target_id, command_id), vector_(vector), quaternion_(quaternion) {};
-public:
-  Vector3 vector_;
-  Quaternion quaternion_;
-};
-
-
-class Event {
+class CurrentRoundEvent : public BaseEvent {
  public:
-  EventType type = EventType::kNone;
+  CurrentRoundEvent(int round) : BaseEvent(EventType::kCurrentRound), round_(round) {};
+  int round_;
 };
 
-class UpdateScoreMessageEvent : public Event {
+class JoinMatchInProgressMessageEvent : public BaseEvent {
  public:
-  EventType type = EventType::kUpdateScoreMessage;
+  JoinMatchInProgressMessageEvent(nlohmann::json json_data) : BaseEvent(EventType::kJoinMatchInProgressMessage), json_data_(json_data) {};
+  nlohmann::json json_data_;
 };
 
-class KillLogUIEvent : public Event {
+class JSONDumpEvent : public BaseEvent {
  public:
-  EventType type = EventType::kKillLogUI;
-  std::string killer;
-  std::string victim;
+  JSONDumpEvent(nlohmann::json json_data) : BaseEvent(EventType::kJSONDump), json_data_(json_data) {};
+  nlohmann::json json_data_;
 };
-
-class BombDefusedEvent : public Event {
- public:
-  EventType type = EventType::kBombDefused;
-};*/
 
 } // namespace score_process
 

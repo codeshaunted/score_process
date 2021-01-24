@@ -10,9 +10,9 @@ find_package(OpenSSL REQUIRED)
 add_compile_definitions(CPPHTTPLIB_OPENSSL_SUPPORT)
 
 add_executable(score_process source/main.cc
-							 source/scoreboard.cc
+							 source/event_scanner.cc
 							 source/steam_api.cc
-							 )
+							  "source/game_objects.h")
 
 target_link_libraries(score_process OpenSSL::SSL
 									OpenSSL::Crypto)

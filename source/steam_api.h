@@ -1,5 +1,5 @@
 // steam_api.h
-// Copyright (C) 2020 averysumner
+// Copyright (C) averysumner
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -31,12 +31,6 @@ class SteamAPI {
  public:
   SteamAPI();
   ~SteamAPI();
-  static SteamAPI& Instance() {
-    static SteamAPI* instance = new SteamAPI();
-    
-    return *instance;
-  }
-
   nlohmann::json Request(std::string url, std::map<std::string, std::string> arguments);
   nlohmann::json GetUsers(std::vector<std::string> ids);
  private:
