@@ -15,4 +15,4 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#define STEAM_API_KEY "556680FF107B7D2AFEB561E1576C29F3"
+#define STEAM_API_KEY ""

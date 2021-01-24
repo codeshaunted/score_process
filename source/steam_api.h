@@ -18,7 +18,9 @@
 #ifndef STEAM_API_H_
 #define STEAM_API_H_
 
+#include <vector>
 #include <string>
+#include <map>
 
 #include "json/single_include/nlohmann/json.hpp"
 #include "cpp-httplib/httplib.h"
@@ -28,16 +30,18 @@ namespace score_process {
 class SteamAPI {
  public:
   SteamAPI();
+  ~SteamAPI();
   static SteamAPI& Instance() {
     static SteamAPI* instance = new SteamAPI();
     
     return *instance;
   }
 
-  nlohmann::json Request(std::string url);
+  nlohmann::json Request(std::string url, std::map<std::string, std::string> arguments);
+  nlohmann::json GetUsers(std::vector<std::string> ids);
  private:
-  std::string base_url_ = "http://api.steampowered.com/";
-  //httplib::Client client_;
+  std::string base_url_ = "http://api.steampowered.com";
+  httplib::Client* client_ = nullptr;
 };
 
 } // namespace score_process
