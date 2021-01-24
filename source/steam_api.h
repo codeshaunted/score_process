@@ -37,7 +37,7 @@ class SteamAPI {
   nlohmann::json Request(std::string url);
  private:
   std::string base_url_ = "http://api.steampowered.com/";
-  httplib::Client client_;
+  //httplib::Client client_;
 };
 
 } // namespace score_process

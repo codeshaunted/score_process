@@ -20,8 +20,6 @@
 namespace score_process {
   
 SteamAPI::SteamAPI() {
-  httplib::Client cli("localhost", 1234);
-  //httplib::Client client_(base_url_.c_str());
 }
 
 nlohmann::json SteamAPI::Request(std::string url) {
